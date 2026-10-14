@@ -1,0 +1,9 @@
+[requires]
+mbedtls/[>=3.6 <3.7]
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout

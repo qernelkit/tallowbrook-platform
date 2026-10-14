@@ -1,0 +1,211 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tallowbrook Gateway API",
+    "version": "4.18.0",
+    "description": "Book shipments, get quotes, fetch labels and receive status events.",
+    "contact": { "name": "Tallowbrook developer support", "email": "developers@tallowbrook.example" }
+  },
+  "servers": [{ "url": "https://api.tallowbrook.example" }],
+  "tags": [
+    { "name": "shipments" },
+    { "name": "quotes" },
+    { "name": "labels" },
+    { "name": "claims" },
+    { "name": "webhooks" }
+  ],
+  "paths": {
+    "/v1/quotes": {
+      "get": {
+        "tags": ["quotes"],
+        "summary": "Price a parcel with every carrier that serves the lane",
+        "parameters": [
+          { "name": "from", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "to", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "country", "in": "query", "schema": { "type": "string", "pattern": "^[A-Z]{2}$" } },
+          { "name": "weightGrams", "in": "query", "required": true, "schema": { "type": "integer", "minimum": 1 } },
+          { "name": "lengthCm", "in": "query", "required": true, "schema": { "type": "number" } },
+          { "name": "widthCm", "in": "query", "required": true, "schema": { "type": "number" } },
+          { "name": "heightCm", "in": "query", "required": true, "schema": { "type": "number" } },
+          { "name": "service", "in": "query", "schema": { "enum": ["standard", "express", "economy"] } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quotes, cheapest first",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "quotes": { "type": "array", "items": { "$ref": "#/components/schemas/Quote" } } } }
+              }
+            }
+          },
+          "502": { "description": "No carrier answered in time" }
+        }
+      }
+    },
+    "/v1/shipments": {
+      "get": {
+        "tags": ["shipments"],
+        "summary": "List your shipments, newest first",
+        "security": [{ "session": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1 } },
+          { "name": "status", "in": "query", "schema": { "$ref": "#/components/schemas/ShipmentStatus" } }
+        ],
+        "responses": { "200": { "description": "A page of shipments" } }
+      },
+      "post": {
+        "tags": ["shipments"],
+        "summary": "Book a shipment",
+        "security": [{ "session": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Booking" } } }
+        },
+        "responses": {
+          "201": { "description": "Booked" },
+          "400": { "description": "Field errors, keyed by field path" }
+        }
+      }
+    },
+    "/v1/shipments/{id}/cancel": {
+      "post": {
+        "tags": ["shipments"],
+        "summary": "Cancel a shipment that has not been collected",
+        "security": [{ "session": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "204": { "description": "Cancelled" }, "404": { "description": "Not found or already collected" } }
+      }
+    },
+    "/v1/labels/{shipmentId}/link": {
+      "post": {
+        "tags": ["labels"],
+        "summary": "Get a short-lived link to the label PDF, for label printers",
+        "security": [{ "session": [] }],
+        "parameters": [{ "name": "shipmentId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "format": { "enum": ["a6", "4x6"] } } } } }
+        },
+        "responses": { "200": { "description": "The link; it expires after 15 minutes" } }
+      }
+    },
+    "/v1/claims": {
+      "post": {
+        "tags": ["claims"],
+        "summary": "Open a claim for a damaged, missing or late shipment",
+        "security": [{ "session": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Claim" } } }
+        },
+        "responses": { "201": { "description": "Claim opened" } }
+      }
+    }
+  },
+  "webhooks": {
+    "shipmentStatus": {
+      "post": {
+        "tags": ["webhooks"],
+        "summary": "A shipment changed status",
+        "parameters": [
+          {
+            "name": "X-Tallowbrook-Signature",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Each delivery carries X-Tallowbrook-Signature: the hex HMAC-SHA512 of the raw request body."
+          },
+          { "name": "X-Tallowbrook-Event", "in": "header", "required": true, "schema": { "type": "string" } },
+          { "name": "X-Tallowbrook-Delivery", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "Content-Digest", "in": "header", "schema": { "type": "string" }, "description": "Per RFC 9530." }
+        ],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StatusEvent" } } }
+        },
+        "responses": { "2XX": { "description": "Accepted; anything else is retried with back-off for up to 24 hours" } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "session": { "type": "apiKey", "in": "header", "name": "Authorization", "description": "Session <token> from /v1/account/login" }
+    },
+    "schemas": {
+      "ShipmentStatus": {
+        "enum": ["booked", "awaiting_collection", "collected", "in_transit", "out_for_delivery", "delivered", "exception", "returned", "cancelled"]
+      },
+      "Address": {
+        "type": "object",
+        "required": ["name", "street", "city", "postcode", "country"],
+        "properties": {
+          "name": { "type": "string" },
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "postcode": { "type": "string" },
+          "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
+          "phone": { "type": "string" }
+        }
+      },
+      "Parcel": {
+        "type": "object",
+        "required": ["weightGrams", "lengthCm", "widthCm", "heightCm"],
+        "properties": {
+          "weightGrams": { "type": "integer", "minimum": 1, "maximum": 70000 },
+          "lengthCm": { "type": "number", "maximum": 300 },
+          "widthCm": { "type": "number", "maximum": 300 },
+          "heightCm": { "type": "number", "maximum": 300 }
+        }
+      },
+      "Booking": {
+        "type": "object",
+        "required": ["service", "sender", "consignee", "parcels"],
+        "properties": {
+          "service": { "enum": ["standard", "express", "economy", "ocean-fcl", "ocean-lcl"] },
+          "sender": { "$ref": "#/components/schemas/Address" },
+          "consignee": { "$ref": "#/components/schemas/Address" },
+          "parcels": { "type": "array", "items": { "$ref": "#/components/schemas/Parcel" }, "minItems": 1 },
+          "collectionDate": { "type": "string", "format": "date" },
+          "deliveryNote": { "type": "string", "maxLength": 500 },
+          "portOfLoading": { "type": "string", "description": "UN/LOCODE, ocean services only" },
+          "portOfDischarge": { "type": "string", "description": "UN/LOCODE, ocean services only" },
+          "containerNumber": { "type": "string", "description": "ISO 6346" }
+        }
+      },
+      "Quote": {
+        "type": "object",
+        "properties": {
+          "carrier": { "type": "string" },
+          "service": { "type": "string" },
+          "amountMinor": { "type": "integer" },
+          "currency": { "type": "string" },
+          "estimatedDelivery": { "type": "string", "format": "date" }
+        }
+      },
+      "Claim": {
+        "type": "object",
+        "required": ["shipmentId", "reason", "description", "amountMinor"],
+        "properties": {
+          "shipmentId": { "type": "string" },
+          "reason": { "enum": ["damaged", "missing_items", "not_delivered", "late"] },
+          "description": { "type": "string", "minLength": 20 },
+          "amountMinor": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "StatusEvent": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "type": { "type": "string", "examples": ["shipment.delivered"] },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "shipmentId": { "type": "string" },
+              "status": { "$ref": "#/components/schemas/ShipmentStatus" },
+              "at": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

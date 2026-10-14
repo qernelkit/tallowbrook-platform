@@ -1,0 +1,4 @@
+# Daily ECB reference rates for invoicing; the rates are published around 16:00 CET.
+SHELL=/bin/sh
+PATH=/usr/local/bin:/usr/bin:/bin
+30 16 * * 1-5 svc-fx /usr/local/bin/fx-rates-sync --source ecb --currencies EUR,GBP,PLN

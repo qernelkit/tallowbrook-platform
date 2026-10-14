@@ -1,0 +1,61 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: api-gateway
+  namespace: istio-system
+spec:
+  secretName: api-gateway-internal-tls
+  dnsNames:
+    - api.internal.tallowbrook.example
+    - api-gateway.istio-system.svc.cluster.local
+  duration: 2160h
+  renewBefore: 360h
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+    encoding: PKCS8
+  signatureAlgorithm: ECDSAWithSHA384
+  usages:
+    - server auth
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ledger-mesh-client
+  namespace: ledger
+spec:
+  secretName: ledger-mesh-client
+  commonName: ledger.ledger.svc.cluster.local
+  uris:
+    - spiffe://cluster.local/ns/ledger/sa/ledger
+  duration: 720h
+  renewBefore: 168h
+  privateKey:
+    algorithm: Ed25519
+    rotationPolicy: Always
+  usages:
+    - client auth
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: partner-portal
+  namespace: partner-portal
+spec:
+  secretName: partner-portal-tls
+  dnsNames:
+    - portal.partners.tallowbrook.example
+  privateKey:
+    algorithm: RSA
+    size: 4096
+    rotationPolicy: Always
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

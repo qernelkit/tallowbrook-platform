@@ -1,0 +1,44 @@
+# bastion-ord1: OpenSSH 10.0 server. Ops staff log in with short-lived certificates from the user CA.
+Port 22
+AddressFamily inet
+ListenAddress 0.0.0.0
+
+HostKey /etc/tallowbrook/pki/ssh/ssh_host_ed25519_key
+HostKeyAlgorithms ssh-ed25519,ecdsa-sha2-nistp256,rsa-sha2-512
+
+KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512,curve25519-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+# user certificates are signed by the ops user CA (see pki/ssh); principals map to Unix accounts
+TrustedUserCAKeys /etc/tallowbrook/pki/ssh/user_ca.pub
+CASignatureAlgorithms ssh-ed25519,ecdsa-sha2-nistp256
+PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,sk-ssh-ed25519@openssh.com,ecdsa-sha2-nistp384,rsa-sha2-512
+RequiredRSASize 3072
+AuthorizedPrincipalsFile /etc/ssh/principals/%u
+AuthorizedKeysFile none
+
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PermitEmptyPasswords no
+AllowGroups ops-bastion
+MaxAuthTries 3
+MaxSessions 4
+LoginGraceTime 30
+UsePAM yes
+
+AllowTcpForwarding yes
+AllowAgentForwarding no
+X11Forwarding no
+PermitTunnel no
+GatewayPorts no
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+LogLevel VERBOSE
+SyslogFacility AUTHPRIV
+Banner /etc/issue.net
+PrintMotd no
+Subsystem sftp internal-sftp

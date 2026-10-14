@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <!-- net10.0 rather than net10.0-windows so the agent builds on the Linux CI runners too. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Tallowbrook.Billing.Agent</RootNamespace>
+    <AssemblyName>Billing.Agent</AssemblyName>
+    <UserSecretsId>tallowbrook-billing-agent</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.13" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.13" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Shared with Billing.Web: both ends of a payout instruction use the same code. -->
+    <Compile Include="../Billing.Web/Payouts/PayoutEnvelope.cs" Link="Payouts/PayoutEnvelope.cs" />
+    <Compile Include="../Billing.Web/Payouts/PayoutModels.cs" Link="Payouts/PayoutModels.cs" />
+    <Compile Include="../Billing.Web/Security/AeadBox.cs" Link="Security/AeadBox.cs" />
+  </ItemGroup>
+
+</Project>

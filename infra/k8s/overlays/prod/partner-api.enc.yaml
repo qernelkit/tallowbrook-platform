@@ -1,0 +1,25 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+    name: partner-api
+    namespace: api
+spec:
+    secretTemplates:
+        - name: partner-api
+          stringData:
+            PARTNER_API_CLIENT_SECRET: ENC[AES256_GCM,data:DD5n/jhjcMKcorDw2L5+uP0xN3k5W0lmf6RygQaKGNn/OosTpJIRZBET4Q==,iv:2YrMnOTMoZr8Nt7hM6DTm6yURgsSY5gv/LcMupc0RTY=,tag:MPlP6V8lQIUmCsA5W2ax4A==,type:str]
+sops:
+    age:
+        - recipient: age1wrxswgk8dtyjgzyjxawtcuwt962dkh6wfst4emmf35dpv9vtwahs8f32ad
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZRjMvRnRBRlFlV0RrMldy
+            WFZpK3dYQ2g0N3VtTTBFZm54UVhMd0g5U3d3Cno5UENTU2NOY0RhZXhPMnpETWJ1
+            SDh3TG0wbVBRSXlNV24zakI1OWNwbEEKLS0tIEczMGhTK3hyNzBiR3hYWWRJQkll
+            UExCSFVvQkU0ZXUzNDRaTXdRdmxlb28KopmziIbK8CZYtF8CnjOSiFEEE44Hy6yS
+            z0xpwCy4zte+ZEURX7b4HoTFBc4o8kD06kFm0ejyPn6IJz6oUtXCcQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-09-30T14:02:11Z"
+    mac: ENC[AES256_GCM,data:wV3w1jlJ0UNQwcj0jhHDgvedxmy2Yl7w5JMXernl3QN1nwOsprY5tbMbHa8Ga08ZnCUauhTSJsrvvVLyeLo/tJ44X9hl+jpaHjSPqnpNWFa5IvN/qCcgrq5W0l/rTe4nnmJjtK3Cy5W0pgCdtcAlgBHaO48sLd6C8tzc5BzZ2D0=,iv:wD6Z11oh73W0QixIReFkyQRnEDt4h6huzht9t8qJhP8=,tag:u/7otI7Uo7aL51CjzTV2pw==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.4

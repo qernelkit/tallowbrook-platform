@@ -1,0 +1,30 @@
+[
+  {
+    "unit": "ORD-T-0117",
+    "depot": "ORD",
+    "vehicle_type": "TRACTOR",
+    "capacity_kg": 18000,
+    "telematics": "geotab"
+  },
+  {
+    "unit": "ORD-V-0230",
+    "depot": "ORD",
+    "vehicle_type": "VAN",
+    "capacity_kg": 1500,
+    "telematics": "geotab"
+  },
+  {
+    "unit": "FRA-C-0009",
+    "depot": "FRA",
+    "vehicle_type": "BIKE",
+    "capacity_kg": 180,
+    "telematics": "none"
+  },
+  {
+    "unit": "DFW-B-0044",
+    "depot": "DFW",
+    "vehicle_type": "BOX_TRUCK",
+    "capacity_kg": 4500,
+    "telematics": "samsara"
+  }
+]

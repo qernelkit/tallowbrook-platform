@@ -1,0 +1,17 @@
+{
+  "base_currency": "USD",
+  "sources": [
+    {
+      "currency": "EUR",
+      "provider": "ECB",
+      "schedule": "daily 16:00 CET",
+      "fallback": "manual"
+    },
+    {
+      "currency": "GBP",
+      "provider": "BOE",
+      "schedule": "daily 16:30 Europe/London",
+      "fallback": "manual"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+# Bastion first boot: hostname, patches, logging agent, then the host key
+# helper baked into the image.
+set -euo pipefail
+
+hostnamectl set-hostname "bastion-$(cloud-init query ds.meta_data.instance_id)"
+dnf -y upgrade --security
+systemctl enable --now amazon-ssm-agent amazon-cloudwatch-agent
+/usr/local/sbin/tb-install-host-key --region "${region}" --secret-id bastion/host-key
+systemctl restart sshd

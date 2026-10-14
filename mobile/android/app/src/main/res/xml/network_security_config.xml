@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config>
+        <domain includeSubdomains="false">api.tallowbrook.example</domain>
+        <pin-set expiration="2027-06-30">
+            <pin digest="SHA-256">48v3T31ykkEXFqIrdJsHGP68zELJJxF7dUnMG9C9HQE=</pin>
+            <pin digest="SHA-256">4kV6UdjvNuNQhyP4aZmVCfbojXgD6WM8r2zF7O6m0/s=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>

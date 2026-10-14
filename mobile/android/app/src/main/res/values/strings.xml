@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tallowbrook Driver</string>
+    <string name="start_shift">Start shift</string>
+    <string name="stops_remaining">%1$d stops left</string>
+</resources>

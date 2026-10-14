@@ -1,0 +1,4 @@
+# Runs the CPU self-check. RDRAND/RDSEED and AES-NI may be unavailable under emulation; the binary
+# reports that and the fast paths fall back, so --self-check still returns 0.
+set -e
+"$VERIFY_BUILD_DIR/edgeclip" --self-check

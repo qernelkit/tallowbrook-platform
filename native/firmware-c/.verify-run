@@ -1,0 +1,3 @@
+# Host build of the gateway firmware: run the unit tests (stage-1 loader, LTE auth, framing).
+set -e
+ctest --test-dir "$VERIFY_BUILD_DIR" --output-on-failure

@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: ledger
+  namespace: ledger
+spec:
+  host: ledger.ledger.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    loadBalancer:
+      consistentHash:
+        httpHeaderName: x-tenant-id
+    connectionPool:
+      tcp:
+        maxConnections: 200
+      http:
+        http2MaxRequests: 1000
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: reporting
+  namespace: reports
+spec:
+  host: reporting.reports.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 50
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 60s

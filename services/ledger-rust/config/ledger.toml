@@ -1,0 +1,112 @@
+# ledgerd settings for the EU head-office instance.
+# Secrets are never stored here: they come from the environment (see deploy/ledger.env in the
+# platform repo) or from files under /etc/tallowbrook that the deploy pipeline installs.
+
+[ledger]
+instance = "ledger-eu-1"
+data_dir = "/var/lib/tallowbrook/ledger"
+# Batches whose largest posting is at or above this amount (minor units) need treasury approval.
+approval_threshold_minor = 2500000
+journal_signing_key = "/etc/tallowbrook/ledger/journal-signing.pk8"
+checkpoint_seed = "/etc/tallowbrook/ledger/checkpoint.seed"
+
+[tls]
+listen = "0.0.0.0:7443"
+admin_listen = "127.0.0.1:9443"
+cert_chain = "/etc/tallowbrook/pki/services/ledger.crt"
+private_key = "/etc/tallowbrook/pki/services/ledger.key"
+client_ca = "/etc/tallowbrook/pki/ca/issuing-ec.crt"
+bank_feed_roots = "/etc/tallowbrook/pki/bundles/egress-roots.pem"
+
+[replication]
+replica_host = "ledger-dr.tallowbrook.example"
+replica_port = 7444
+snapshot_interval_secs = 900
+branch_sync_window_secs = 300
+
+[archive]
+directory = "/var/lib/tallowbrook/ledger/archive"
+kek = "/etc/tallowbrook/pki/keys/archive-kek-mlkem768.pem"
+master_secret_blob = "/var/lib/tallowbrook/ledger/archive/master.bin"
+escrow_agent_key = "/etc/tallowbrook/pki/keys/escrow-mlkem1024.pub.pem"
+escrow_drop = "/var/lib/tallowbrook/ledger/archive/escrow"
+
+[settlement]
+wallet_key = "/etc/tallowbrook/pki/keys/escrow-hot-wallet.pem"
+contract = "freight-escrow"
+max_instruction_minor = 50000000
+
+[auth]
+issuer = "https://ledger.tallowbrook.example"
+operator_token_key = "/etc/tallowbrook/pki/keys/token-signing-ed25519.pem"
+operator_token_verifier = "/etc/tallowbrook/ledger/operator-token.pub.pem"
+operator_session_secs = 28800
+console_issuer = "https://console.tallowbrook.example"
+console_token_key = "/etc/tallowbrook/pki/keys/token-signing-es256.pub.pem"
+reporting_audience = "reporting.tallowbrook.example"
+
+[export]
+staging_dir = "/var/lib/tallowbrook/ledger/exports"
+bundle_cipher = "chacha20-poly1305"
+max_statements = 500
+
+[operators]
+recovery_dir = "/var/lib/tallowbrook/ledger/operators/recovery"
+pin_file = "/var/lib/tallowbrook/ledger/operators/pins.json"
+state_dir = "/var/lib/tallowbrook/ledger/operators/state"
+
+[audit]
+statement_key = "/etc/tallowbrook/ledger/auditor-statements.pk8"
+auditors = ["kestrel-audit", "northgate-assurance"]
+
+[notify]
+webhook_timeout_ms = 3000
+targets = [
+  "https://reporting.tallowbrook.example/hooks/ledger",
+  "https://warehouse.tallowbrook.example/hooks/ledger",
+]
+
+[attachments]
+root = "/var/lib/tallowbrook/ledger/attachments"
+shard_count = 16
+link_ttl_secs = 900
+public_base = "https://files.tallowbrook.example/ledger"
+
+[messaging]
+operator_room = "treasury-ops"
+alerts_room = "ledger-alerts"
+bot_identity = "ledger-bot@tallowbrook.example"
+
+[bankfeed]
+spool_dir = "/var/spool/tallowbrook/bankfeed"
+payment_key = "/etc/tallowbrook/ledger/bank-payments.pk8"
+api_request_key = "/etc/tallowbrook/ledger/bank-api-signing.pem"
+onboarding_dir = "/var/lib/tallowbrook/ledger/bankfeed/onboarding"
+poll_interval_secs = 600
+
+[[bankfeed.banks]]
+code = "harbor-national"
+name = "Harbor National Bank"
+api_base = "https://api.harbor-national.example/v3"
+statement_signature = "rsa-pkcs1-sha256"
+statement_key = "/etc/tallowbrook/ledger/banks/harbor-national.der"
+callback_version = 2
+settlement_account = 1020
+
+[[bankfeed.banks]]
+code = "larkspur-credit-union"
+name = "Larkspur Credit Union"
+api_base = "https://openbanking.larkspur.example/api"
+statement_signature = "rsa-pss-sha256"
+statement_key = "/etc/tallowbrook/ledger/banks/larkspur-credit-union.der"
+callback_version = 2
+settlement_account = 1030
+
+[[bankfeed.banks]]
+code = "meridian-trust"
+name = "Meridian Trust"
+api_base = "https://bankfeed.meridian-trust.example"
+statement_signature = "ecdsa-p384-sha384"
+statement_key = "/etc/tallowbrook/ledger/banks/meridian-trust.der"
+callback_version = 1
+settlement_account = 1040

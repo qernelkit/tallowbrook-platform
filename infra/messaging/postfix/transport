@@ -1,0 +1,3 @@
+# Postfix transport map for mx1 (postmap hash:/etc/postfix/transport after editing).
+# Partner EDI mailboxes go straight to the partner's gateway; everything else uses MX lookups.
+edi.partner.example    smtp:[mx-edi.partner.example]:25

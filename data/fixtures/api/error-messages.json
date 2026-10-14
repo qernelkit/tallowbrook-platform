@@ -1,0 +1,10 @@
+{
+  "invalid_request": "The request is missing a required parameter or has an invalid value.",
+  "invalid_token": "The access token is expired, revoked or malformed.",
+  "insufficient_scope": "The access token does not grant the scope this endpoint needs.",
+  "shipment_not_found": "No shipment with that reference exists for your account.",
+  "unsupported_signature": "Webhook signatures using SHA-1 are not accepted; sign with SHA-256",
+  "webhook_timestamp_skew": "The webhook timestamp is more than five minutes from our clock.",
+  "rate_limited": "Too many requests. Retry after the number of seconds in Retry-After.",
+  "label_carrier_unavailable": "The carrier did not return a label. Try again or choose another service."
+}

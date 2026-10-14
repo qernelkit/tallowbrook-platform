@@ -1,0 +1,29 @@
+[
+  {
+    "code": "ORD",
+    "name": "Chicago O'Hare depot",
+    "timezone": "America/Chicago",
+    "address": "1400 Freight Way, Elk Grove Village, IL",
+    "geohash": "dp3wjztvt",
+    "dock_doors": 42,
+    "hazmat_capable": true
+  },
+  {
+    "code": "DFW",
+    "name": "Dallas Fort Worth depot",
+    "timezone": "America/Chicago",
+    "address": "88 Logistics Pkwy, Coppell, TX",
+    "geohash": "9vg5pn3w1",
+    "dock_doors": 36,
+    "hazmat_capable": true
+  },
+  {
+    "code": "FRA",
+    "name": "Frankfurt depot",
+    "timezone": "Europe/Berlin",
+    "address": "Cargo City Süd, Frankfurt am Main",
+    "geohash": "u0yj6b8wq",
+    "dock_doors": 24,
+    "hazmat_capable": false
+  }
+]

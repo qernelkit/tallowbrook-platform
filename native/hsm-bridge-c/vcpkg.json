@@ -1,0 +1,12 @@
+{
+  "name": "tbkeyd",
+  "version-string": "4.2.0",
+  "description": "Tallowbrook key custody daemon",
+  "homepage": "https://git.tallowbrook.example/platform/tbkeyd",
+  "builtin-baseline": "b322364f06308bdd24823f9d8f03fe0ed8e73437",
+  "dependencies": [
+    { "name": "liboqs", "version>=": "0.16.0" },
+    { "name": "libsodium", "version>=": "1.0.18" },
+    { "name": "openssl", "version>=": "3.5.0" }
+  ]
+}

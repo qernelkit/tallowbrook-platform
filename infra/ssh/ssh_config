@@ -1,0 +1,28 @@
+# Ops client config, installed on the deploy runners as /etc/ssh/ssh_config.d/tallowbrook.conf.
+
+Host bastion-ord1
+    HostName bastion-ord1.tallowbrook.example
+    User deploy
+    IdentityFile /etc/tallowbrook/pki/ssh/deploy_ed25519
+    CertificateFile /etc/tallowbrook/pki/ssh/deploy_ed25519-cert.pub
+    IdentitiesOnly yes
+    ForwardAgent no
+
+# Partner SFTP drop for EDI files. The partner sets these algorithms; their side is fixed until their 2027 refresh.
+Host sftp.partner.example
+    Port 2222
+    User tallowbrook-edi
+    IdentityFile ~/.ssh/partner_sftp_rsa
+    HostKeyAlgorithms +ssh-rsa
+    KexAlgorithms +diffie-hellman-group14-sha1
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    IdentitiesOnly yes
+    ConnectTimeout 20
+
+Host *
+    UserKnownHostsFile /etc/tallowbrook/pki/ssh/known_hosts
+    StrictHostKeyChecking yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    AddKeysToAgent no
+    LogLevel ERROR

@@ -1,0 +1,12 @@
+<Project>
+  <!-- Shared by Billing.Web and Billing.Agent. Each project sets its own TargetFramework. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <Company>Tallowbrook Logistics</Company>
+    <Product>Tallowbrook Billing</Product>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

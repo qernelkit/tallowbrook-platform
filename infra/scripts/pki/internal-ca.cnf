@@ -1,0 +1,20 @@
+# openssl req settings for the internal services CA certificate
+# (issue-internal-certs.sh renew-ca). The CA key itself never leaves the
+# offline host.
+
+[ req ]
+default_md         = sha384
+prompt             = no
+distinguished_name = ca_dn
+x509_extensions    = v3_ca
+
+[ ca_dn ]
+C  = US
+O  = Tallowbrook Logistics
+OU = Platform Engineering
+CN = Tallowbrook Internal Services CA
+
+[ v3_ca ]
+basicConstraints = critical, CA:TRUE, pathlen:0
+keyUsage         = critical, keyCertSign, cRLSign
+nameConstraints  = critical, permitted;DNS:.internal.tallowbrook.example, permitted;DNS:.svc.cluster.local

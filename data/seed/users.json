@@ -1,0 +1,49 @@
+[
+  {
+    "username": "dispatch.lead",
+    "email": "dispatch.lead@tallowbrook.example",
+    "display_name": "Dispatch Lead (seed)",
+    "roles": ["dispatcher", "dispatch-admin"],
+    "depot": "ORD",
+    "password_hash": "$2b$12$xlUGsA5KHgwLcAf4yWccUud/AL1P8z8988UFMlbqiStQMWnvYeUM6",
+    "password_changed_at": "2026-04-02T09:15:00Z",
+    "active": true
+  },
+  {
+    "username": "portal.customer",
+    "email": "orders@harrowgate.example",
+    "display_name": "Harrowgate Freight Partners (seed)",
+    "roles": ["customer-portal"],
+    "depot": null,
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$zyuvqg/BIURYK+d0lWHxFA$+WCRA9cho67RpoCfEAOMQq83a0Sry+yQmbizorvqqm0",
+    "active": true
+  },
+  {
+    "username": "reporting.admin",
+    "email": "reporting.admin@tallowbrook.example",
+    "display_name": "Reporting Admin (seed)",
+    "roles": ["reporting-admin"],
+    "depot": null,
+    "password_hash": "pbkdf2_sha256$600000$kttwDMfAV6cdbZBz3byqFl$JHCkL7hDv7G3paJXO01ga7zn5FI+Gd2gEo2MzOV55B8=",
+    "password_reset_required": true,
+    "active": true
+  },
+  {
+    "username": "finance.ops",
+    "email": "finance.ops@tallowbrook.example",
+    "display_name": "Finance Ops (seed)",
+    "roles": ["billing-admin"],
+    "depot": null,
+    "sso_only": true,
+    "active": true
+  },
+  {
+    "username": "driver.0412",
+    "email": "driver.0412@tallowbrook.example",
+    "display_name": "Driver 0412 (seed)",
+    "roles": ["driver"],
+    "depot": "ORD",
+    "sso_only": true,
+    "active": false
+  }
+]

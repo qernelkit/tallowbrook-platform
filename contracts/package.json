@@ -1,0 +1,10 @@
+{
+  "name": "@tallowbrook/freight-escrow-contracts",
+  "version": "1.6.0",
+  "private": true,
+  "description": "On-chain freight escrow, courier passkeys, customs receipts and carrier payouts.",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@openzeppelin/contracts": "5.6.1"
+  }
+}

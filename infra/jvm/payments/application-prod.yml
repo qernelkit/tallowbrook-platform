@@ -1,0 +1,31 @@
+# Production overrides for the payments service, mounted at
+# /etc/tallowbrook/payments/application-prod.yml and activated with SPRING_PROFILES_ACTIVE=prod.
+server:
+  port: 8443
+  ssl:
+    enabled-protocols: TLSv1.3
+    ciphers: TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256
+    key-store: file:/etc/tallowbrook/pki/keystores/payments.p12
+    key-store-type: PKCS12
+    key-store-password: ${PAYMENTS_KEYSTORE_PASSWORD}
+    key-alias: payments
+    trust-store: file:/etc/tallowbrook/pki/keystores/truststore.jks
+    trust-store-type: JKS
+    trust-store-password: ${PAYMENTS_TRUSTSTORE_PASSWORD}
+    client-auth: need
+
+spring:
+  datasource:
+    url: jdbc:postgresql://payments-db.internal.tallowbrook.example:5432/payments
+    username: payments_app
+    password: ${PAYMENTS_DB_PASSWORD}
+
+tallowbrook:
+  payments:
+    hsm:
+      pkcs11-config: /etc/tallowbrook/jvm/payments-hsm.cfg
+
+logging:
+  level:
+    root: WARN
+    com.tallowbrook.payments: INFO

@@ -1,0 +1,26 @@
+#
+# Security property overrides for the payments service JVM.
+#
+# Loaded on top of $JAVA_HOME/conf/security/java.security with
+#   -Djava.security.properties=/etc/tallowbrook/jvm/java.security
+# (single '=', so only the keys below change; everything else keeps the JDK 25 default).
+#
+# Owner: platform-ops. Changes go through the payments change board.
+#
+
+# TLS: no protocol below 1.2, no static-RSA key exchange, no small DH groups.
+jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, DTLSv1.0, RC4, DES, \
+    MD5withRSA, DH keySize < 2048, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
+    ECDH, TLS_RSA_*
+
+# Certificate paths: partner chains must use keys of at least 2048 bits.
+jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, \
+    RSA keySize < 2048, DSA keySize < 2048, EC keySize < 224, \
+    SHA1 usage SignedJAR & denyAfter 2019-01-01
+
+# Seed source for the SUN provider's generators. The containers have no hardware RNG device
+# mapped, and /dev/urandom does not block after boot.
+securerandom.source=file:/dev/urandom
+
+# What SecureRandom.getInstanceStrong() returns.
+securerandom.strongAlgorithms=DRBG:SUN,NativePRNGBlocking:SUN

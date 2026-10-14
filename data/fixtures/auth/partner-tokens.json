@@ -1,0 +1,9 @@
+{
+  "comment": "Access token minted for the Ridgeway Freight sandbox client; used by the partner API contract tests.",
+  "partner": "ridgeway-freight",
+  "client_id": "ptn_ridgeway_sandbox",
+  "access_token": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRiLTIwMjYtMDMtZXMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2lkLnRhbGxvd2Jyb29rLmV4YW1wbGUiLCJzdWIiOiJwYXJ0bmVyOnJpZGdld2F5LWZyZWlnaHQiLCJhdWQiOiJodHRwczovL2FwaS50YWxsb3dicm9vay5leGFtcGxlIiwic2NvcGUiOiJzaGlwbWVudHM6cmVhZCB0cmFja2luZzpyZWFkIiwiaWF0IjoxNzcyMzIzMjAwLCJleHAiOjE4MDM4NTkyMDAsImp0aSI6IjhjMWYzZjBlLTViN2EtNGQyZS05YTYxLTJmMGQ2YzRiOWUxNyJ9.p_e9cgNxPx2S3TkCm5548vhithj4tLuku9s_I3uEkfDgdp7ttQQRsuk_dtt4PbOMUOUsOemn_YnxTs0kowP2yg",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "shipments:read tracking:read"
+}

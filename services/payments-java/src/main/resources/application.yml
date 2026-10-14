@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: payments
+  datasource:
+    url: jdbc:h2:mem:payments;MODE=PostgreSQL
+    username: payments
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.tallowbrook.payments: INFO
+
+tallowbrook:
+  payments:
+    hsm:
+      pkcs11-config: /etc/tallowbrook/jvm/payments-hsm.cfg
+    signing:
+      keystore: /etc/tallowbrook/pki/keystores/payments.p12
+      key-alias: payments
+      keystore-password: ${PAYMENTS_SIGNING_PASSWORD}
+    tokens:
+      issuer: https://payments.tallowbrook.example
+      token-signing-key: /etc/tallowbrook/pki/keys/token-signing-es256.pem
+      ttl: 15m
+    webhooks:
+      inbound:
+        mac-algorithm: HmacSHA512
+        tolerance: 5m
+    statements:
+      digest-algorithm: SHA-512
+      bank-code: HRBR
+    partners:
+      tls-protocol: TLSv1.3
+      truststore: /etc/tallowbrook/pki/keystores/truststore.jks
+      truststore-password: ${PARTNER_TRUST_PASSWORD}
+      timeout: 10s
+    acquirers:
+      northgate:
+        batch-cipher: DESede/CBC/PKCS5Padding
+        trailer-checksum: CRC32
+        upload-dir: /var/spool/payments/northgate
+    archive:
+      escrow-public-key: /etc/tallowbrook/pki/keys/escrow-mlkem1024.pub.pem
+      retention: 2555d
+    card:
+      pan-index-key: ${PAN_INDEX_KEY}
+      tokenization-key: ${PAN_TOKENIZATION_KEY}
+    merchants:
+      ref-round-keys: ${MERCHANT_REF_ROUND_KEYS}
+      v0-export-key: ${MERCHANT_V0_EXPORT_KEY:}
+      ca-url: https://ca.internal.tallowbrook.example/merchants
+    ledger:
+      seal-public-key: ${LEDGER_SEAL_PUBLIC_KEY}
+    fx:
+      ecb-reference-rates-url: https://rates.tallowbrook.example/ecb/eurofxref-daily.xml
+      refresh: 6h
+    reference-salt: ${PAYOUT_REFERENCE_SALT}

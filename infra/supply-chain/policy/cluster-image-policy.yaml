@@ -1,0 +1,28 @@
+# Admission policy for images from our registry: either signed with the release
+# key from CI, or signed keyless by the release workflow's GitHub identity.
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: tallowbrook-releases
+spec:
+  images:
+    - glob: "ghcr.io/tallowbrook/**"
+    - glob: "registry.tallowbrook.example/platform/**"
+  authorities:
+    - name: release-key
+      key:
+        data: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqSSfRpjwTiN5dXBQ4hk2Cs9X/Fvp
+          j7dxfiKmdpGj4ee7pruohZa4zRgTDJdKS7AJ25d8q7Cqy/dlcs//5CMZLw==
+          -----END PUBLIC KEY-----
+        hashAlgorithm: sha256
+    - name: release-workflow
+      keyless:
+        url: https://fulcio.sigstore.dev
+        identities:
+          - issuer: https://token.actions.githubusercontent.com
+            subjectRegExp: ^https://github\.com/tallowbrook/platform/\.github/workflows/release\.yml@refs/tags/v.*$
+      ctlog:
+        url: https://rekor.sigstore.dev
+  mode: enforce

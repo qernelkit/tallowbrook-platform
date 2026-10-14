@@ -1,0 +1,4 @@
+# Run by CI after the build: start-up self-check, then the unit tests.
+set -e
+"$VERIFY_BUILD_DIR/tbkeyd" --self-check
+ctest --test-dir "$VERIFY_BUILD_DIR" --output-on-failure

@@ -1,0 +1,77 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  attestations: write
+
+env:
+  IMAGE_NAME: ghcr.io/tallowbrook/platform-api
+
+jobs:
+  image:
+    runs-on: ubuntu-24.04
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: docker/setup-buildx-action@v3.11.1
+      - uses: docker/login-action@v3.5.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: push
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+      - uses: sigstore/cosign-installer@v3.9.2
+        with:
+          cosign-release: 'v2.5.3'
+      - name: Sign the pushed image
+        run: cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${IMAGE}@${DIGEST}"
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          IMAGE: ${{ env.IMAGE_NAME }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+      - uses: actions/attest-build-provenance@v2.4.0
+        with:
+          subject-name: ${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+  tarballs:
+    runs-on: ubuntu-24.04
+    needs: image
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Build release tarballs
+        run: make dist VERSION="${GITHUB_REF_NAME}"
+      - name: Import the release key
+        run: printf '%s\n' "$RELEASE_GPG_KEY" | gpg --batch --import
+        env:
+          RELEASE_GPG_KEY: ${{ secrets.RELEASE_GPG_KEY }}
+      - name: Detached signatures and checksums
+        working-directory: dist
+        env:
+          GPG_PASSPHRASE: ${{ secrets.RELEASE_GPG_PASSPHRASE }}
+        run: |
+          for f in *.tar.gz; do
+            gpg --batch --pinentry-mode loopback --passphrase-fd 0 --detach-sign --armor --digest-algo SHA512 "$f" <<<"$GPG_PASSPHRASE"
+          done
+          sha256sum ./*.tar.gz > SHA256SUMS
+      - uses: softprops/action-gh-release@v2.3.2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*.tar.gz.asc
+            dist/SHA256SUMS

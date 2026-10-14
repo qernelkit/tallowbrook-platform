@@ -1,0 +1,15 @@
+{
+  "issuer_ref": "root-2026",
+  "allowed_domains": [
+    "internal.tallowbrook.example",
+    "svc.cluster.local"
+  ],
+  "allow_subdomains": true,
+  "allow_bare_domains": false,
+  "max_ttl": "2160h",
+  "key_type": "ec",
+  "key_bits": 384,
+  "server_flag": true,
+  "client_flag": true,
+  "require_cn": false
+}

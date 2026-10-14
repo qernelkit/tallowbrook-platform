@@ -1,0 +1,10 @@
+[requires]
+botan/[>=3.12 <4]
+cryptopp/8.9.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout

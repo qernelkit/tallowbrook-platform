@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports-sso
+  namespace: reports
+  labels:
+    app: reports-sso
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: reports-sso
+  template:
+    metadata:
+      labels:
+        app: reports-sso
+    spec:
+      serviceAccountName: reports-sso
+      containers:
+        - name: proxy
+          image: registry.tallowbrook.example/platform/reports-sso:2.4.1
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: UPSTREAM_URL
+              value: http://reporting.reports.svc.cluster.local:8080
+            - name: KRB5_KTNAME
+              value: /etc/reports-sso/http.keytab
+            - name: SERVICE_PRINCIPAL
+              value: HTTP/reports.tallowbrook.example
+          volumeMounts:
+            - name: keytab
+              mountPath: /etc/reports-sso
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+      volumes:
+        - name: keytab
+          secret:
+            secretName: reports-http-keytab
+            items:
+              - key: krb5.keytab
+                path: http.keytab

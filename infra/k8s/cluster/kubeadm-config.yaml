@@ -1,0 +1,34 @@
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: v1.34.1
+clusterName: tb-prod
+controlPlaneEndpoint: k8s-api.internal.tallowbrook.example:6443
+networking:
+  podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/12
+  dnsDomain: cluster.local
+apiServer:
+  extraArgs:
+    - name: encryption-provider-config
+      value: /etc/kubernetes/enc/encryption-config.yaml
+    - name: tls-min-version
+      value: VersionTLS12
+    - name: tls-cipher-suites
+      value: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+    - name: audit-log-path
+      value: /var/log/kubernetes/audit.log
+    - name: audit-policy-file
+      value: /etc/kubernetes/audit-policy.yaml
+  extraVolumes:
+    - name: apiserver-config
+      hostPath: /etc/kubernetes/enc
+      mountPath: /etc/kubernetes/enc
+      readOnly: true
+      pathType: DirectoryOrCreate
+    - name: audit-log
+      hostPath: /var/log/kubernetes
+      mountPath: /var/log/kubernetes
+      pathType: DirectoryOrCreate
+etcd:
+  local:
+    dataDir: /var/lib/etcd

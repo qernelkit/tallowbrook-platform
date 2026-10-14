@@ -1,0 +1,18 @@
+[
+  {
+    "driver": "driver.0412",
+    "certificate_type": "HAZMAT_CLASS_3",
+    "certificate_id": "TC-2026-00412",
+    "issuing_body": "Illinois Secretary of State",
+    "issued_on": "2026-01-15",
+    "expires_on": "2029-01-15"
+  },
+  {
+    "driver": "driver.0377",
+    "certificate_type": "FORKLIFT_CLASS_IV",
+    "certificate_id": "FL-2025-01988",
+    "issuing_body": "Tallowbrook Training Center ORD",
+    "issued_on": "2025-09-02",
+    "expires_on": "2028-09-02"
+  }
+]

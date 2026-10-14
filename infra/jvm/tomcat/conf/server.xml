@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tomcat 11 for the payments console (back-office WAR). Staff devices connect on 8443 with their
+  device certificates; port 8080 only redirects.
+-->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true"
+               scheme="https" secure="true">
+      <SSLHostConfig
+          protocols="+TLSv1.2,+TLSv1.3"
+          ciphers="TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"
+          cipherSuites="TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256"
+          groups="secp384r1,secp256r1"
+          truststoreFile="/etc/tallowbrook/pki/keystores/truststore.jks"
+          certificateVerification="optional">
+        <Certificate certificateKeystoreFile="/etc/tallowbrook/pki/keystores/payments.p12"
+                     certificateKeystoreType="PKCS12"
+                     certificateKeystorePasswordFile="conf/keystore.pass" />
+      </SSLHostConfig>
+    </Connector>
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="console_access" suffix=".log"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b %D" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>

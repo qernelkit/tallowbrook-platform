@@ -1,0 +1,12 @@
+requires 'perl', '5.036';
+
+requires 'Crypt::CBC', '== 3.04';
+requires 'Crypt::OpenSSL::RSA', '== 0.35';
+requires 'Crypt::Eksblowfish', '== 0.009';
+requires 'CryptX', '== 0.085';
+
+# HTTPS for HTTP::Tiny comes from the system IO::Socket::SSL and Net::SSLeay packages.
+
+on 'test' => sub {
+    requires 'Test::More', '>= 0.98';
+};

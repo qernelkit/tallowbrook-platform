@@ -1,0 +1,11 @@
+# Certificate Transparency logs we trust when probing the edge
+# (check-edge-tls.sh passes this file to openssl s_client -ctlogfile).
+enabled_logs = hollowmere2026h2,brightwater2026
+
+[hollowmere2026h2]
+description = Hollowmere 2026h2
+key = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE9xA9tWG8c/J660p+NQEmywyTXCM4otVBMxRZWWNdYwcwHTYRQC9HBs/wP/9CL4txzT6uCBctbXLWIlYaIxJT0Q==
+
+[brightwater2026]
+description = Brightwater 2026
+key = MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErQHcFOS1T8RIhbARZfIe0OiBsHCfbHAmqeM4446FEaZYJC4wBpabSIthrzvqNcHXmMqvpIvCwWxqwN7dcAKXFQ==

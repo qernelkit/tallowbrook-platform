@@ -1,0 +1,16 @@
+[
+  {
+    "user": "dispatch.lead@tallowbrook.example",
+    "method": "authenticator-app",
+    "otpauth_uri": "otpauth://totp/Tallowbrook:dispatch.lead@tallowbrook.example?secret=CGYEXRLDZPWNLRRNPIGTACPEOE4PKYKO&issuer=Tallowbrook&algorithm=SHA1&digits=6&period=30",
+    "enrolled_at": "2026-04-02T09:20:41Z",
+    "recovery_codes_issued": 10
+  },
+  {
+    "user": "finance.ops@tallowbrook.example",
+    "method": "authenticator-app",
+    "otpauth_uri": "otpauth://totp/Tallowbrook:finance.ops@tallowbrook.example?secret=EX4VSXT4OEWKMC5PL3EG75U624M4XIZAW2VKYC3ZUS6ABSHUKW2A&issuer=Tallowbrook&algorithm=SHA256&digits=8&period=30",
+    "enrolled_at": "2026-05-18T14:02:09Z",
+    "recovery_codes_issued": 10
+  }
+]

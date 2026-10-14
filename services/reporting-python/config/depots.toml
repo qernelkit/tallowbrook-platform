@@ -1,0 +1,21 @@
+# Depot PLC gateways polled by `tallowbrook-reporting telemetry collect`.
+# Joliet has an explicit security string; the others are configured by gateway generation.
+
+[depots.joliet]
+name = "Joliet"
+endpoint = "opc.tcp://plc-gw.joliet.depots.tallowbrook.example:4840/"
+security = "Basic256Sha256,SignAndEncrypt,/var/lib/tallowbrook-reporting/opcua/client-cert.der,/var/lib/tallowbrook-reporting/opcua/client-key.pem"
+poll_seconds = 30
+
+[depots.galesburg]
+name = "Galesburg"
+endpoint = "opc.tcp://plc-gw.galesburg.depots.tallowbrook.example:4840/"
+gateway = "g1"
+poll_seconds = 60
+
+[depots.peoria]
+name = "Peoria"
+endpoint = "opc.tcp://plc-gw.peoria.depots.tallowbrook.example:4840/"
+gateway = "g4"
+server_cert = "/var/lib/tallowbrook-reporting/gateways/peoria-gw.der"
+poll_seconds = 30

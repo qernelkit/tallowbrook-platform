@@ -1,0 +1,5 @@
+# Confirms the Botan identifiers the tool relies on exist at run time (the HSS-LMS parameter string,
+# ML-KEM mode, the TLS policy groups), then runs the unit tests.
+set -e
+"$VERIFY_BUILD_DIR/vaultarc" --self-check
+ctest --test-dir "$VERIFY_BUILD_DIR" --output-on-failure

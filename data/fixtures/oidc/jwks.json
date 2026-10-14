@@ -1,0 +1,29 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "use": "sig",
+      "alg": "RS256",
+      "kid": "tb-2026-03-rs",
+      "n": "x2nJs8_wRuPORJF_kNRInOIdiPf2ASpTJILxrEZyNxRn4Zb8aQsPeUfPhA0DDTBTEBgyGULpWOObn_dwPrttdoyZ-4uuEGBSgl0D-ubMDTfr4i8CGg4RYcby1-WHgrIf7SDeopPlbjN1SXQ0W_qPCa01JD2T_Aspwtyq0xZt1m7hBK-MBd-PNR9wZLfQckAvin6-6kadExGbpgFHfE-Xpj5zk5cdAGKQxD_SmXXQOsBt8qF2BDNj5Fc7w49laGM9KOZyyQVR7dJKwi9sXxrWCZdX4RwOOcFj-8HYTCUrod4hp5gEXw-5yiLG1THRa4LvPHCh7N9a1fyCoMLegyai_w",
+      "e": "AQAB"
+    },
+    {
+      "kty": "EC",
+      "use": "sig",
+      "alg": "ES256",
+      "kid": "tb-2026-03-es",
+      "crv": "P-256",
+      "x": "QKomyBVpBNpmoaISQ8Cu2ZbQRyv5dRaF1lQZvjYI6_g",
+      "y": "29B5XADtZ-WadVXIWTCncwNxmLc44rinq7ItEZp2OlM"
+    },
+    {
+      "kty": "OKP",
+      "use": "sig",
+      "alg": "EdDSA",
+      "kid": "tb-2026-03-ed",
+      "crv": "Ed25519",
+      "x": "GjEsodK8TG0WrAW_TwAuwrtEcbuEel6eRFKArj9r_xY"
+    }
+  ]
+}

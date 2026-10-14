@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Harrowgate Freight Partners' AD FS metadata as delivered for the customer
+     portal federation (portal SSO tests load it as the enterprise IdP). -->
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ID="_8636c9f16e27e00905fc0f0c834d61b6" entityID="https://idp.harrowgate.example/adfs/services/trust" validUntil="2027-08-01T00:00:00Z">
+  <ds:Signature>
+    <ds:SignedInfo>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+      <ds:Reference URI="#_8636c9f16e27e00905fc0f0c834d61b6">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <ds:DigestValue>+lWx0B4L+y7FqbdVgU+avtGBMQo=</ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>ogyC8qbljEavXm0oyMl7eqj6Zzc1ZIN+cuUxuyj3lP0KotfK8VXOT402WA84Zrf2SqYrod3+WXFeQmNEhkYC2Pjt1msOKwmjYB68ZgnV29+VjiS7Siy4Lf+bSrIN4r8xyn4JUTaoWw6AZiEZkRyEZNFGNEOYtve+S3Tzkv5yfT882BBeXBi/oSD7lVrHdHcXyfyKwdMxWORpOpyeC3GzmurGQ65K+smxhlWUXW2r1NlvGAnnBdGtzlpApJ/LAgeEQ4BFR5nE463s7nSdrw8ZwVucBMhp2VwqS7/Kk6EMzabOCR0F2si3otSjwI8hOpkW8fkJ85jnIPa/Tan5gTGgoQ==</ds:SignatureValue>
+  </ds:Signature>
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="false">
+    <md:KeyDescriptor>
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>
+            MIIDVTCCAj2gAwIBAgIEWj0AATANBgkqhkiG9w0BAQsFADBUMQswCQYDVQQGEwJH
+            QjEkMCIGA1UECgwbSGFycm93Z2F0ZSBGcmVpZ2h0IFBhcnRuZXJzMR8wHQYDVQQD
+            DBZpZHAuaGFycm93Z2F0ZS5leGFtcGxlMB4XDTI1MDgwMTAwMDAwMFoXDTI4MDgw
+            MTAwMDAwMFowVDELMAkGA1UEBhMCR0IxJDAiBgNVBAoMG0hhcnJvd2dhdGUgRnJl
+            aWdodCBQYXJ0bmVyczEfMB0GA1UEAwwWaWRwLmhhcnJvd2dhdGUuZXhhbXBsZTCC
+            ASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMuplkNtLOJ6JuEXeiS3jJZ4
+            RIYnbo3CbYUqs0Q1Ju/n0qhvJzf7pLhzH5iJBH9YEbsOdOBdmRuaMP+QR6NfXQQ6
+            kiZOh5MzqgLFPmk+zMk0uufP5MP+l0De2NI7W/DISmghVgSwL9pX9W0xHBnB9jj3
+            NEupMysTUBUEz9l/FHE97cqY73xeD/Xyg/PCeRmO6O8zXviKUKrSXieA6PxynwtM
+            Ni4ywToKECAz8x/PEGR0mVrkeOBkv18tOKbd2bfqkWsKaKSN2bn/S0db78pNnRAK
+            B20Vqau1VcX0r5QGGbUM6Qf8Wf3TOLOn6vPkggCT/bzpbbpgmahc2fGu7573XmUC
+            AwEAAaMvMC0wHQYDVR0OBBYEFDwmljDuhX3VQVEnkpcAxvFTwyPrMAwGA1UdEwEB
+            /wQCMAAwDQYJKoZIhvcNAQELBQADggEBAEG20EVMp8FtuCRT1N8vqdoYdfZ1175f
+            W71KSGTtQGfBSmMVvzMIk3/3MmmpBOt7xGJ574zHrhgHkmvE2MWp/Pc5Lom0MOry
+            EgEAh6U6AERv6jGHnPVyxnWNE5BxiH/vqhkPryIY87WuVTuWHgzQzklS95Jj1Nue
+            AOfiTl1YauOCKuyGdKHRdoo5s5n3XEcXbMvCmbOcyrJJe1Je0tDUg2vpPbo6rIR5
+            KAvRJuf4lyh/0RvCNVtHrwF1oSYMUu63yfKoDqClGN3FERJZA9y8RLpPPrXxsx6n
+            U3j5AynHtdn9j+IhGUOVv3i+pcOtc0aivI6io6Ty125HrmdLXKnwhQw=
+          </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes256-gcm"/>
+    </md:KeyDescriptor>
+    <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.harrowgate.example/adfs/ls/"/>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.harrowgate.example/adfs/ls/"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://idp.harrowgate.example/adfs/ls/"/>
+  </md:IDPSSODescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">Harrowgate Freight Partners</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">Harrowgate Freight</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">https://www.harrowgate.example/</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="technical">
+    <md:Company>Harrowgate Freight Partners</md:Company>
+    <md:EmailAddress>mailto:identity@harrowgate.example</md:EmailAddress>
+  </md:ContactPerson>
+</md:EntityDescriptor>

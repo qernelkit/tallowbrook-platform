@@ -1,0 +1,10 @@
+[
+  {
+    "Email": "portal-admin@tallowbrook.example",
+    "DisplayName": "Portal Administrator",
+    "CustomerId": "TB-000001",
+    "TenantId": "tb-eu",
+    "Roles": [ "CustomerAdmin" ],
+    "PasswordHash": "AQAAAAIAAYagAAAAEOxGZU829CCVKLBcsI+DjvnDlB9RZh7msUN65w39rckWYS4562Bo2kWmMgZPoaVWJA=="
+  }
+]

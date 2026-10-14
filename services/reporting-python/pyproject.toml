@@ -1,0 +1,51 @@
+[project]
+name = "tallowbrook-reporting"
+version = "3.14.0"
+description = "Customer and partner exports, statements and depot telemetry for Tallowbrook Logistics"
+readme = "README.md"
+requires-python = "==3.13.*"
+dependencies = [
+  "asyncua==2.1.0",
+  "aws-encryption-sdk==4.0.7",
+  "boto3==1.43.113",
+  "cryptography==50.0.2",
+  "falcon==4.4.0",
+  "itsdangerous==2.2.0",
+  "jwcrypto==1.6.1",
+  "kyber-py==1.2.0",
+  "mmh3==5.3.1",
+  "paramiko==5.0.0",
+  "passlib[argon2]==1.7.4",
+  "pikepdf==10.17.0",
+  "py-ecc==8.0.0",
+  "pyjwt==2.15.1",
+  "pyotp==2.10.0",
+  "pysaml2==7.5.5",
+  "python-pkcs11==0.10.0",
+  "pyzipper==0.4.0",
+  "xxhash==4.0.1",
+]
+
+[project.scripts]
+tallowbrook-reporting = "tallowbrook_reporting.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest==8.4.2",
+  "types-boto3[kms,s3]==1.43.113",
+]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tallowbrook_reporting"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"

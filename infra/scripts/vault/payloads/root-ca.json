@@ -1,0 +1,11 @@
+{
+  "common_name": "Tallowbrook Vault Root CA",
+  "issuer_name": "root-2026",
+  "organization": "Tallowbrook Logistics",
+  "ou": "Platform Engineering",
+  "country": "US",
+  "key_type": "rsa",
+  "key_bits": 4096,
+  "ttl": "87600h",
+  "exclude_cn_from_sans": true
+}

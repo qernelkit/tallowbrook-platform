@@ -1,0 +1,24 @@
+# kube-apiserver encryption at rest. New writes go through the KMS plugin; the
+# two local providers stay until every object written before the KMS cut-over
+# has been rewritten (kubectl get secrets -A -o json | kubectl replace -f -).
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+      - configmaps
+    providers:
+      - kms:
+          apiVersion: v2
+          name: aws-encryption-provider
+          endpoint: unix:///var/run/kmsplugin/socket.sock
+          timeout: 3s
+      - aesgcm:
+          keys:
+            - name: key-2025-11
+              secret: m6A/3j01RncDTS72liH//Wp0M9AhjCeI/QRojMUIwcA=
+      - aescbc:
+          keys:
+            - name: key-2023-04
+              secret: pTVkIZEVn1hfFZidxvh1q2WvGpLNT90CzSv43yQlmeo=
+      - identity: {}

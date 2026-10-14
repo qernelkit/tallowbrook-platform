@@ -1,0 +1,58 @@
+; tallowbrook.example, unsigned source. Signed offline on the ops workstation, see ../README.md.
+; Bump the serial on every change.
+$ORIGIN tallowbrook.example.
+$TTL 3600
+@                       IN SOA  ns1.tallowbrook.example. hostmaster.tallowbrook.example. (
+                                2026101401 ; serial
+                                7200       ; refresh
+                                3600       ; retry
+                                1209600    ; expire
+                                3600 )     ; negative answers
+                        IN NS   ns1.tallowbrook.example.
+                        IN NS   ns2.tallowbrook.example.
+                        IN MX   10 mx1.tallowbrook.example.
+                        IN CAA  0 issue "ca.tallowbrook.example"
+                        IN CAA  0 iodef "mailto:pki@tallowbrook.example"
+tallowbrook.example. 3600 IN DNSKEY 257 3 13 NdGx8LBqbvOluVEetLc5t1QKKsk1S6UuxE9P6saqsD7Gf2AGNwwvRLNfmpsD14guHeNU/j4f0aY17BPfU60i9g==
+tallowbrook.example. 3600 IN DNSKEY 256 3 15 vLpXNvVKoo4wxl8vFVkt3lLSBakCdD4Y45nvXl+Wivc=
+
+; name servers and mail
+ns1                     IN A    203.0.113.53
+ns2                     IN A    198.51.100.53
+mx1                     IN A    203.0.113.25
+
+; public web and API edge (edge-ord1), portal
+@                       IN A    203.0.113.80
+www                     IN A    203.0.113.80
+api                     IN A    203.0.113.80
+edge                    IN A    203.0.113.81
+mta-sts                 IN A    203.0.113.80
+portal                  IN A    203.0.113.82
+payments                IN A    203.0.113.84
+login                   IN A    203.0.113.86
+
+; VPN and depot gateways
+vpn-gw-ord1             IN A    203.0.113.10
+vpn-gw-partner          IN A    203.0.113.40
+des-moines-gw           IN A    198.51.100.44
+elk-grove-gw            IN A    198.51.100.46
+
+; delegation of depots.tallowbrook.example (zone signed by ns1 itself)
+depots                  IN NS   ns1.depots.tallowbrook.example.
+depots                  IN NS   ns2.tallowbrook.example.
+ns1.depots              IN A    203.0.113.54
+depots           3600   IN DS   39376 13 2 92297130515F0BA18827F47A0F29D59625CB22A550865EC486DE2EE4900B1FFA
+
+; mail authentication for mx1
+_25._tcp.mx1     3600   IN TLSA 3 1 1 f84109fc445588e4b376957913065ba534378081c661d38096e6c6939c3ff6f6
+mail2026._domainkey     IN TXT  ( "v=DKIM1; h=sha256; k=rsa; p="
+                                  "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqydrV/sT0LR5"
+                                  "3sN1SP+CdJ0dFq8XM7GmZFfuGmyFXRJRqNWFgjTLlm21zUm7j/Bx4hZA"
+                                  "p3Pj/kg8MiBsSxAUqRox+C16MF0JO+0oRG4wlOQF8zkSOXV/hvkXajtd"
+                                  "H4Xc8lAKtp65FTrYcVqhBF3NXYaiM9t9xRkcxgrbGkBTuN8oV6MX+1ij"
+                                  "Vlf/+7tGBizHqBh8XG0+yTuhentzDWJwQpUFbaA7dSFI7MP3Ha0WZAzk"
+                                  "Mr1NCC3aX0GKA7d+blyUZPSg0n61S0RLI8+y4LHtLAHToKwNuMwJjWS/"
+                                  "9i97kEDuPhduhOAPAyxsAdQB4w4pHnYx01NN+0okaj0t/lLXHwIDAQAB" )
+_dmarc           3600   IN TXT  "v=DMARC1; p=reject; rua=mailto:dmarc-reports@tallowbrook.example"
+@                       IN TXT  "v=spf1 ip4:203.0.113.25 -all"
+_mta-sts                IN TXT  "v=STSv1; id=20261001T000000"

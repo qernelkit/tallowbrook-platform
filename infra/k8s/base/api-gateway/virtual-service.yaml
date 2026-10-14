@@ -1,0 +1,56 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: api
+  namespace: istio-system
+spec:
+  hosts:
+    - api.tallowbrook.example
+  gateways:
+    - api-gateway
+  http:
+    - name: shipments
+      match:
+        - uri:
+            prefix: /v2/shipments
+      route:
+        - destination:
+            host: api-node.api.svc.cluster.local
+            port:
+              number: 8080
+      timeout: 30s
+      retries:
+        attempts: 2
+        retryOn: gateway-error,connect-failure
+    - name: billing
+      match:
+        - uri:
+            prefix: /v2/invoices
+      route:
+        - destination:
+            host: billing.billing.svc.cluster.local
+            port:
+              number: 8080
+    - name: default
+      route:
+        - destination:
+            host: api-node.api.svc.cluster.local
+            port:
+              number: 8080
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: www
+  namespace: istio-system
+spec:
+  hosts:
+    - www.tallowbrook.example
+  gateways:
+    - api-gateway
+  http:
+    - route:
+        - destination:
+            host: web-spa.web.svc.cluster.local
+            port:
+              number: 8080

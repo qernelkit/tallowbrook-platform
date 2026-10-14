@@ -1,0 +1,20 @@
+# Public certificates (partner portal, status pages) from Let's Encrypt, using
+# DNS-01 against the Route 53 zone.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: platform@tallowbrook.example
+    privateKeySecretRef:
+      name: letsencrypt-prod-account
+    solvers:
+      - selector:
+          dnsZones:
+            - tallowbrook.example
+        dns01:
+          route53:
+            region: us-east-2
+            hostedZoneID: Z04417262K7QXAMPLE1Z

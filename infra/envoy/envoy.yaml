@@ -1,0 +1,123 @@
+# mesh-gw-ord1: Envoy 1.39 front proxy for internal callers of ledger.tallowbrook.example.
+node:
+  id: mesh-gw-ord1
+  cluster: mesh-gateway
+
+admin:
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 9901
+
+static_resources:
+  listeners:
+    - name: mesh_ingress
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8443
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: mesh_ingress
+                codec_type: AUTO
+                use_remote_address: true
+                request_timeout: 30s
+                route_config:
+                  name: ledger_routes
+                  virtual_hosts:
+                    - name: ledger
+                      domains: ["ledger.tallowbrook.example", "ledger.tallowbrook.example:8443"]
+                      routes:
+                        # a tenant's requests stick to one ledger worker so its journal batches stay ordered
+                        - match: {prefix: "/ledger/"}
+                          route:
+                            cluster: ledger_local
+                            timeout: 15s
+                            hash_policy:
+                              - header: {header_name: x-tenant-id}
+                        - match: {prefix: "/payments/"}
+                          route:
+                            cluster: payments_mtls
+                            timeout: 10s
+                            retry_policy:
+                              retry_on: connect-failure,reset
+                              num_retries: 2
+                        - match: {prefix: "/"}
+                          direct_response:
+                            status: 404
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+              common_tls_context:
+                alpn_protocols: [h2, http/1.1]
+                tls_params:
+                  tls_minimum_protocol_version: TLSv1_2
+                  tls_maximum_protocol_version: TLSv1_3
+                  cipher_suites:
+                    - ECDHE-ECDSA-AES256-GCM-SHA384
+                    - ECDHE-ECDSA-CHACHA20-POLY1305
+                  ecdh_curves:
+                    - X25519MLKEM768
+                    - P-256
+                tls_certificates:
+                  - certificate_chain: {filename: /etc/tallowbrook/pki/services/ledger.crt}
+                    private_key: {filename: /etc/tallowbrook/pki/services/ledger.key}
+
+  clusters:
+    - name: ledger_local
+      type: STATIC
+      connect_timeout: 1s
+      lb_policy: RING_HASH
+      load_assignment:
+        cluster_name: ledger_local
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: {address: 127.0.0.1, port_value: 7070}
+              - endpoint:
+                  address:
+                    socket_address: {address: 127.0.0.1, port_value: 7071}
+
+    - name: payments_mtls
+      type: STRICT_DNS
+      connect_timeout: 2s
+      dns_lookup_family: V4_ONLY
+      load_assignment:
+        cluster_name: payments_mtls
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: {address: payments.tallowbrook.example, port_value: 8443}
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+          sni: payments.tallowbrook.example
+          common_tls_context:
+            tls_params:
+              tls_minimum_protocol_version: TLSv1_3
+            tls_certificates:
+              - certificate_chain: {filename: /etc/tallowbrook/pki/services/mesh-client.crt}
+                private_key: {filename: /etc/tallowbrook/pki/services/mesh-client.key}
+            validation_context:
+              trusted_ca: {filename: /etc/tallowbrook/pki/ca/issuing-rsa.crt}
+              verify_certificate_spki:
+                - "vn/ropDSjUOxwRBf1wUlSuOQ7dc+oE786VMXVCEO/x0="
+      lb_policy: RING_HASH
+      ring_hash_lb_config:
+        hash_function: XX_HASH
+        minimum_ring_size: 1024

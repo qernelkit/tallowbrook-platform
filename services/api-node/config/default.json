@@ -1,0 +1,109 @@
+{
+  "service": "api-gateway",
+  "listen": {
+    "host": "0.0.0.0",
+    "port": 8443,
+    "shutdownGraceMs": 15000
+  },
+  "publicBaseUrl": "https://api.tallowbrook.example",
+  "tls": {
+    "certFile": "/etc/tallowbrook/pki/services/api.crt",
+    "keyFile": "/etc/tallowbrook/pki/services/api.key",
+    "ciphers": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256"
+  },
+  "upstream": {
+    "paymentsUrl": "https://payments.internal.tallowbrook.example",
+    "ledgerUrl": "https://ledger.internal.tallowbrook.example",
+    "minTlsVersion": "TLSv1.3",
+    "sigalgs": "ecdsa_secp256r1_sha256:ed25519:rsa_pss_rsae_sha256",
+    "extraCaFile": null,
+    "maxSockets": 64,
+    "timeoutMs": 5000
+  },
+  "mongo": {
+    "uri": "mongodb://mongo-0.data.tallowbrook.example:27017,mongo-1.data.tallowbrook.example:27017/?replicaSet=rs0",
+    "database": "tallowbrook"
+  },
+  "keyVault": {
+    "namespace": "encryption.__keyVault",
+    "localMasterKeyFile": "/run/secrets/customer-pii-master-key"
+  },
+  "session": {
+    "cookieName": "tb.sid",
+    "cookieMaxAgeMs": 43200000,
+    "tokenTtl": "12h"
+  },
+  "tokens": {
+    "issuer": "https://api.tallowbrook.example",
+    "signingKeyFile": "/etc/tallowbrook/pki/keys/token-signing-es256.pem",
+    "keyId": "tb-access-2026-03",
+    "ttl": "15m"
+  },
+  "partners": {
+    "issuer": "https://api.tallowbrook.example/partners",
+    "jwksUrl": "https://partners.tallowbrook.example/.well-known/jwks.json",
+    "trustedIssuers": ["https://id.harborpay.example", "https://sso.atlasfreight.example"],
+    "acceptedAlgorithms": ["EdDSA", "ES256", "PS256"],
+    "signingKeyFile": "/etc/tallowbrook/pki/keys/token-signing-ed25519.pem",
+    "harborPayKeyFile": "/etc/tallowbrook/partners/harbor-pay-keywrap.pub.pem",
+    "envelopeKeyFiles": {
+      "harbor-customs": "/etc/tallowbrook/partners/harbor-customs-kem1024.pub",
+      "default": "/etc/tallowbrook/partners/pilot-partners-kem768.pub"
+    }
+  },
+  "receipts": {
+    "curve": "secp384r1",
+    "keysCollection": "receiptKeys"
+  },
+  "escrow": {
+    "rpcUrl": "https://rpc.chain.tallowbrook.example",
+    "chainId": 8453,
+    "contractAddress": "0x5f3c9a2e71d04b8c6e1a92f0d7b3c4e5a6f8b901",
+    "hotWalletKeyFile": "/etc/tallowbrook/pki/keys/escrow-hot-wallet.pem",
+    "confirmations": 2
+  },
+  "customs": {
+    "brokerKeyFile": "/etc/tallowbrook/customs/broker-declarations.pub.pem",
+    "brokerKeyId": "harbor-customs-2026",
+    "archivePrefix": "customs-archive"
+  },
+  "manifests": {
+    "keyFile": "/etc/tallowbrook/customs/manifest-pilot.key"
+  },
+  "links": {
+    "labelBaseUrl": "https://api.tallowbrook.example/v1/labels",
+    "lifetimeSeconds": 900,
+    "mediaBaseUrl": "https://media.tallowbrook.example",
+    "cdnKeyFile": "/etc/tallowbrook/media/cdn-url-key.pem",
+    "cdnKeyId": "K2TBPOD2026"
+  },
+  "carriers": {
+    "ridgeway": {
+      "ratingHost": "rates.ridgewayparcel.example",
+      "ratingPath": "/v3/quotes",
+      "timeoutMs": 4000
+    },
+    "atlasFreight": {
+      "sftpHost": "sftp.atlasfreight.example",
+      "manifestDir": "/inbound/tallowbrook"
+    }
+  },
+  "passkeys": {
+    "rpId": "tallowbrook.example",
+    "rpName": "Tallowbrook"
+  },
+  "publicIds": {
+    "length": 10
+  },
+  "webhooks": {
+    "deliveryTimeoutMs": 10000,
+    "maxAttempts": 8
+  },
+  "cache": {
+    "shards": 16,
+    "defaultMaxAgeSeconds": 60
+  },
+  "log": {
+    "level": "info"
+  }
+}
